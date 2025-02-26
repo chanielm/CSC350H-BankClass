@@ -25,7 +25,8 @@ class BankAccount
 
     public BankAccount(string? name, float initbal)
     {
-        this.id = (name == null || name.Length < 3) ? "Acc" : name.Replace(" ", null).Substring(0, 3);
+        if (name != null) name = name.Replace(" ", null);
+        this.id = (name == null || name.Length < 3) ? "Acc" : name.Substring(0, 3);
         Random r = new();
         for (int i = 0; i < 5; i++) id += r.Next(10);
 
