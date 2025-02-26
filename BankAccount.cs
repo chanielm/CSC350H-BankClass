@@ -9,8 +9,8 @@ Class: BankAccount
     + Balance: float
     + Transactions: List<float>
     Methods:
-    + Deposit(float): void
-    + Withdraw(float): void
+    + Deposit(float): bool
+    + Withdraw(float): bool
 */
 
 class BankAccount
@@ -23,22 +23,48 @@ class BankAccount
     public float Balance { get { return balance; } }
     public List<float> Transactions { get { return transactions; } }
 
-    public BankAccount(string id, float initbal)
+    public BankAccount(string? name, float initbal)
     {
-        this.id = id;
+        this.id = (name == null || name.Length < 3) ? "Acc" : name.Replace(" ", null).Substring(0, 3);
+        Random r = new();
+        for (int i = 0; i < 5; i++) id += r.Next(10);
+
         this.balance = initbal;
         this.transactions = [];
     }
 
-    public void Deposit(float amount)
+    public bool Deposit(float amount)
     {
+        if (amount < 0) 
+        {
+            Console.WriteLine("FAILED: Cannot deposit a negative amount!");
+            return false;
+        }
+        
         balance += amount;
+        Console.WriteLine("DEPOSIT SUCCESS.");
         transactions.Add(amount);
+        return true;
     }
 
-    public void Withdraw(float amount)
+    public bool Withdraw(float amount)
     {
+        if (amount < 0) 
+        {
+            Console.WriteLine("FAILED: Cannot withdraw a negative amount!");
+            return false;
+        }
+
+        if (balance < amount) 
+        {
+            Console.WriteLine("FAILED: Insufficient Funds!");
+            return false;
+        }
+        
+
         balance -= amount;
+        Console.WriteLine("WITHDRAW SUCCESS.");
         transactions.Add(-amount);
+        return true;
     }
 }
